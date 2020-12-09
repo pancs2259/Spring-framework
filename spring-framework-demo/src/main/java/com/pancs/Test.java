@@ -1,15 +1,27 @@
 package com.pancs;
 
 import com.pancs.config.ApplicationContext;
+import com.pancs.service.OrderService;
+import com.pancs.service.UserService;
 
 public class Test {
     public static void main(String[] args) {
         System.out.println("--------Spring测试---------");
-        //Spring启动,扫描
+        //Spring启动,完成bean扫描，创建非懒加载的单例bean
         ApplicationContext applicationContext = new ApplicationContext(AppConfig.class);
 
-        Object userService = applicationContext.getBean("userService");
-        System.out.println(userService);
+        try {
+            UserService userService = (UserService) applicationContext.getBean("userService");
+            UserService userService2 = (UserService) applicationContext.getBean("userService");
+            OrderService orderService = (OrderService) applicationContext.getBean("orderService");
+            OrderService orderService2 = (OrderService) applicationContext.getBean("orderService");
+            System.out.println(userService);
+            System.out.println(userService2);
+            System.out.println(orderService);
+            System.out.println(orderService2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

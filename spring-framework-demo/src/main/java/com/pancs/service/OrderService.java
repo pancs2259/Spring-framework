@@ -6,7 +6,6 @@ import com.pancs.config.Scope;
 
 @Component("orderService")
 @Scope("prototype")
-@Lazy
 public class OrderService {
 
 }
