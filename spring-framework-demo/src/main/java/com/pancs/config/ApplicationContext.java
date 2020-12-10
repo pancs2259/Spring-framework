@@ -1,12 +1,9 @@
 package com.pancs.config;
 
-import com.pancs.component.Component;
-import com.pancs.component.ComponentScan;
-import com.pancs.component.Lazy;
-import com.pancs.component.Scope;
+import com.pancs.component.*;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,14 +41,34 @@ public class ApplicationContext {
         Class beanClazz = beanDefinition.getBeanClazz();
         try {
             Object bean = beanClazz.getConstructor().newInstance();
+
+            //获取实例后，完成属性自动注入
+            Field[] declaredFields = beanClazz.getDeclaredFields();
+            for (Field field : declaredFields) {
+                if (field.isAnnotationPresent(Autowired.class)) {
+                    //根据type获取beanName
+                    Class fieldType = field.getType();
+                    Map<String, String> hashMap = new HashMap<>();
+                    for (String name : beanDefinitionMap.keySet()) {
+                        BeanDefinition definition = beanDefinitionMap.get(name);
+                        Class definitionBeanClazz = definition.getBeanClazz();
+                        if (definitionBeanClazz.isAssignableFrom(fieldType)) {
+                            hashMap.put(name,name);
+                        }
+                    }
+                    //根据name当做beanName
+                    String fieldName = field.getName();
+                    System.out.println("fieldName:"+fieldName);
+                    if (hashMap.get(fieldName)!=null) {
+                        getBean(fieldName);
+                    }else{
+                      getBean(fieldName);
+                    }
+
+                }
+            }
             return bean;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -109,7 +126,9 @@ public class ApplicationContext {
                 //单例bean
                 if (!beanDefinition.isLazy()) {
                     //非懒加载单例bean直接从单例池取
-                    return singletonObjects.get(beanName);
+                    Object bean = singletonObjects.get(beanName);
+                    //为什么会没值？-->Sring创建bean是无序的，依赖自动注入的时候，依赖的bean可能还未创建，注入的时候需要创建出来
+                    return bean == null ? createBean(beanDefinition) : bean;
                 } else {
                     //懒加载的单例bean第一次使用的时候创建,创建后放入单例池，之后不用再重新创建
                     if (singletonObjects.get(beanName) == null) {
