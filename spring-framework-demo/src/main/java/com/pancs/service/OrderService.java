@@ -1,8 +1,7 @@
 package com.pancs.service;
 
-import com.pancs.config.Component;
-import com.pancs.config.Lazy;
-import com.pancs.config.Scope;
+import com.pancs.component.Component;
+import com.pancs.component.Scope;
 
 @Component("orderService")
 @Scope("prototype")

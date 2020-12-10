@@ -1,4 +1,4 @@
-package com.pancs.config;
+package com.pancs.component;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Lazy {
-
+public @interface Scope {
+    String value() default "";
 }

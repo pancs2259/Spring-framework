@@ -1,10 +1,12 @@
 package com.pancs.service;
 
 import com.pancs.component.Component;
+import com.pancs.component.Lazy;
 import com.pancs.component.Scope;
 
-@Component("userService")
+@Component("studentService")
 @Scope("singleton")
-public class UserService {
+@Lazy
+public class StudentService {
 
 }

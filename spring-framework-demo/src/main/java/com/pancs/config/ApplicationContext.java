@@ -1,7 +1,11 @@
 package com.pancs.config;
 
+import com.pancs.component.Component;
+import com.pancs.component.ComponentScan;
+import com.pancs.component.Lazy;
+import com.pancs.component.Scope;
+
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
