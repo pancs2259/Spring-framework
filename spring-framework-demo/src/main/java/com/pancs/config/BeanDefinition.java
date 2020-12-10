@@ -3,7 +3,7 @@ package com.pancs.config;
 //bean定义，存放bean解析的结果
 public class BeanDefinition {
 
-    private String scope;//作用域  是单例bean(singleton)还是原型bean(prototype)
+    private String scope = "singleton";//作用域  是单例bean(singleton)还是原型bean(prototype)
     private boolean isLazy = false;//是否懒加载 默认false，非懒加载
     private Class beanClazz;//bean的全限定名
 
