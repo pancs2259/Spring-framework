@@ -47,7 +47,10 @@ public class ApplicationContext {
 
             //获取实例后，完成属性自动注入 bean后置处理器
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                beanPostProcessor.setApplicationContext(this);
+                //将applicationContext注入处理器
+                if (beanPostProcessor instanceof ApplicationContextAware) {
+                    ((ApplicationContextAware) beanPostProcessor).setApplicationContext(this);
+                }
                 beanPostProcessor.postProcessAfterInitialization(instance,beanName);
             }
             //beanNameAware 设置beanName属性设置
@@ -55,7 +58,7 @@ public class ApplicationContext {
                 ((BeanNameAware) instance).setBeanName(beanName);
             }
 
-            //beanNameAware 设置beanName属性设置
+            //InitializingBean 校验
             if (instance instanceof InitializingBean) {
                 ((InitializingBean) instance).afterPropertiesSet();
             }

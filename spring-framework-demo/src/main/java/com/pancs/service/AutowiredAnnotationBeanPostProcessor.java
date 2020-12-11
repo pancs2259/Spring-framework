@@ -3,12 +3,13 @@ package com.pancs.service;
 import com.pancs.component.Autowired;
 import com.pancs.component.Component;
 import com.pancs.config.ApplicationContext;
+import com.pancs.config.ApplicationContextAware;
 import com.pancs.config.BeanPostProcessor;
 
 import java.lang.reflect.Field;
 
 @Component("autowiredAnnotationBeanPostProcessor")
-public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
+public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
@@ -23,7 +24,6 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws Exception {
-        System.out.println("这是处理Autowired注解的bean后置处理器!beanName:"+beanName);
         //获取实例后，完成属性自动注入
         Class<?> beanClazz = bean.getClass();
         Field[] declaredFields = beanClazz.getDeclaredFields();
@@ -31,6 +31,7 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
             if (field.isAnnotationPresent(Autowired.class)) {
                 //byType --> byName
                 String fieldName = field.getName();
+                System.out.println("这是处理Autowired注解的bean后置处理器!完成bean:"+beanName+"的field："+fieldName+"属性注入");
                 field.setAccessible(true);
                 field.set(bean,applicationContext.getBean(fieldName));
             }
